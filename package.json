@@ -1,7 +1,11 @@
 {
   "name": "juejin",
   "version": "1.0.0",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "dependencies": {
-    "axios": "^1.1.3"
+    "axios": "^1.1.3",
+    "lodash": "^4.17.21"
   }
 }

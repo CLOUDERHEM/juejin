@@ -1,24 +1,21 @@
-name: main
+name: 掘金任务自动执行
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   schedule:
-    - cron: 0 2,14 * * *
+  - cron: "30 21 * * *" # 该时间为UTC时间，比北京时间晚8个小时，每天早上5点半自动执行
 
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install dependencies
+      - name: 下载node依赖
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
       - run: npm install axios
-      - name: main
+      - run: npm install lodash
+      - name: 执行脚本
         env:
           COOKIE: ${{ secrets.COOKIE }}
         run: node src/index.js
