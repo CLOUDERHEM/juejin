@@ -5,7 +5,7 @@ const cookie = "_tea_utm_cache_2608=undefined; __tea_cookie_tokens_2608=%257B%25
 
 console.log(cookie)
 
-axios.post('https://api.juejin.cn/growth_api/v1/check_in', {
+axios.post('https://api.juejin.cn/growth_api/v1/check_in',{}, {
   headers: {
     "content-type": "application/json",
     "cookie": cookie,
