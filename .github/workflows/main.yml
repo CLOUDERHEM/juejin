@@ -12,7 +12,8 @@ jobs:
   main:
     runs-on: ubuntu-latest
 
-    steps:    
+    steps:   
+    - uses: actions/checkout@v2
     - name: main
       run: |
         node main.js
