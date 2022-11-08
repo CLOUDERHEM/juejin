@@ -1,4 +1,4 @@
-console.log('hello')
+console.log(process.env.COOKIE)
 const axios = require('axios');
 
 axios.post('https://api.juejin.cn/growth_api/v1/check_in', {
