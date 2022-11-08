@@ -19,4 +19,4 @@ jobs:
         sudo npm install axios
     - name: main
       run: |
-        COOKIE=secrets.COOKIE node main.js
+        COOKIE=${secrets.COOKIE} node main.js
