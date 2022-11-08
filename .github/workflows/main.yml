@@ -17,7 +17,8 @@ jobs:
     - name: Install dependencies
       run: npm install axios
     - name: main
+    - shell: bash
       env:
         COOKIE: ${{ secrets.COOKIE }}
       run: |
-        COOKIE="$env:SUPER_SECRET" node main.js
+        COOKIE="$SUPER_SECRET" node main.js
