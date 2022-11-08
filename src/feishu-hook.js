@@ -1,8 +1,12 @@
 const axios = require('axios')
 
 function feishu_hook (text) {
+	if(!process.env.FEISHU_WEB_HOOK){
+		console.log('🤖️ 飞书机器人未设置')
+		return
+	}
 	return axios.post(
-		'https://open.feishu.cn/open-apis/bot/v2/hook/53d17651-05ef-4fe4-b674-43cb5056e51a',
+		process.env.FEISHU_WEB_HOOK,
 		{
 			'msg_type': 'text',
 			'content': {
