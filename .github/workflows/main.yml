@@ -11,16 +11,14 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
-
-    steps:   
-    - uses: actions/checkout@v3
-    - name: Install dependencies
-      uses: actions/setup-node@v3
-      with:
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: actions/setup-node@v3
+        with:
           node-version: 16.x
-    - run: npm install axios
-    - name: main
-      env:
-        COOKIE: ${{ secrets.COOKIE }}
-      run: |
-        COOKIE=${{ secrets.COOKIE }} node main.js
+      - run: npm install axios
+      - name: main
+        env:
+          COOKIE: ${{ secrets.COOKIE }}
+        run: node src/index.js
