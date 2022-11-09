@@ -13,7 +13,7 @@ const feishu_hook = require('./feishu-hook');
             await sign_in();
             //签到后免费抽奖
             await luck_draw();
-        }), dip_lucky()])
+        })(), dip_lucky()])
     //查询当前矿石数
     await get_mineral();
     //飞书消息通知
