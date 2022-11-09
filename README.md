@@ -18,8 +18,9 @@
 ### 三、设置Actions
 ![img_3.png](assets/img_3.png)
 ### 四、主动触发执行
-修改任意位置，提交到main分支，即可触发任务开始
-在Actions中能看到执行结果
+![img.png](assets/img_4.png)
+### 五、定时执行
+![img.png](assets/img_5.png)
 
 ## 如果是新用户可走我的链接
 ![7441667978683_.pic.jpg](assets/7441667978683_.pic.jpg)
