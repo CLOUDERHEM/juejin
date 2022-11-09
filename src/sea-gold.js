@@ -3,6 +3,7 @@ const axios = require('./juejin-axios');
 const messages = require('./message');
 const chunk = require('lodash/chunk');
 const random = require('lodash/random');
+const message = require("./message");
 
 const COLUMN = 6;
 const OBSTACLE = 6;
@@ -119,6 +120,10 @@ class Game {
 }
 
 const sea_gold = async () => {
+    if (!process.env.UID) {
+        message.push('❌ 未设置UID，游戏不能执行');
+        return
+    }
     const game = new Game();
     await game.init();
     const {mapData, gameId} = await game.start();
