@@ -5,10 +5,18 @@ const dip_lucky = require('./dip-lucky');
 const message = require('./message');
 const feishu_hook = require('./feishu-hook');
 
+//主任务线
 (async function () {
-	//查询当前矿石数
-	await get_mineral()
-	await Promise.allSettled([sign_in(), luck_draw(), dip_lucky()])
-	feishu_hook(message.text)
+    await Promise.allSettled([
+        (async () => {
+            //签到
+            await sign_in();
+            //签到后免费抽奖
+            await luck_draw();
+        }), dip_lucky()])
+    //查询当前矿石数
+    await get_mineral();
+    //飞书消息通知
+    feishu_hook(message.text)
 })()
 
