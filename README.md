@@ -8,6 +8,7 @@
 | 抽奖        | ✅    | COOKIE          |
 | 沾喜气       | ✅    | COOKIE          |
 | 飞书webhook | ✅    | FEISHU_WEB_HOOK |
+| 游戏        | ✅    | COOKIE  UID     |
 
 ## 如何使用
 ### 一、Fork此仓库
