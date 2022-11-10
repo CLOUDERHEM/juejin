@@ -1,3 +1,4 @@
+const {to} = require('await-to-js');
 const jwt = require('jsonwebtoken');
 const axios = require('./juejin-axios');
 const messages = require('./message');
@@ -5,12 +6,22 @@ const chunk = require('lodash/chunk');
 const random = require('lodash/random');
 const message = require("./message");
 
-const COLUMN = 6;
-const OBSTACLE = 6;
-const ROLE_LIST = {
-    CLICK: 2, YOYO: 1, HAWKING: 3
-};
-const PUBLIC_KEY = `-----BEGIN EC PARAMETERS-----
+
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
+class Game {
+    #axios
+    #gameId
+    #mapData
+    #COLUMN = 6
+    #OBSTACLE = 6
+    #ROLE_LIST = {
+        CLICK: 2, YOYO: 1, HAWKING: 3
+    }
+    #NEGATIVE_DIRECTION = {
+        U: 'D', L: 'R', D: 'U', R: 'L'
+    }
+    #PUBLIC_KEY = `-----BEGIN EC PARAMETERS-----
 BggqhkjOPQMBBw==
 -----END EC PARAMETERS-----
 -----BEGIN EC PRIVATE KEY-----
@@ -19,44 +30,29 @@ AwEHoUQDQgAEEkViJDU8lYJUenS6IxPlvFJtUCDNF0c/F/cX07KCweC4Q/nOKsoU
 nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
 -----END EC PRIVATE KEY-----
 `
-const NEGATIVE_DIRECTION = {
-    U: 'D', L: 'R', D: 'U', R: 'L'
-};
-
-const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
-const getTrack = (maps) => {
-    const mapsTrack = [[3, 1, 'U'], [2, 2, 'L'], [4, 2, 'D'], [3, 3, 'R']];
-    const mapsTree = chunk(maps, COLUMN);
-    // 过滤掉有障碍物的位置
-    const trackXY = mapsTrack.filter((item) => {
-        const xy = mapsTree[item[0]][item[1]];
-        return xy !== OBSTACLE;
-    });
-
-    // 移动后反方向移动回初始位置
-    return trackXY.map((item) => [item[2], NEGATIVE_DIRECTION[item[2]]]).flat();
-};
-
-class Game {
-    #axios
-    getAuthorization = () => axios.post('https://juejin.cn/get/token').then(({data}) => `Bearer ${data.data}`);
+    #getAuthorization = () => axios.post('https://juejin.cn/get/token').then(({data}) => `Bearer ${data.data}`);
     init = async () => {
-        const authorization = await this.getAuthorization();
+        const authorization = await this.#getAuthorization();
         this.#axios = axios.create({
             headers: {
                 authorization,
             }
         });
     }
-
     start = async () => {
         const {
-            userInfo, gameStatus
+            userInfo,
+            gameStatus,
+            todayDiamond,
+            todayLimitDiamond
         } = await this.#axios.get('https://juejin-game.bytedance.com/game/sea-gold/home/info', {
             params: {
                 time: +new Date(), uid: process.env.UID
             }
         }).then(({data}) => data.data);
+        if (!(todayDiamond < todayLimitDiamond)) {
+            return Promise.reject('🎮【海底掘金】已上限')
+        }
         if (gameStatus !== 0) {
             // 如果已经在游戏中那么先退出游戏
             await this.end()
@@ -70,33 +66,56 @@ class Game {
             }
         })
         //开始
-        return this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/game/start', {
-            roleId: ROLE_LIST.CLICK
+        await this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/game/start', {
+            roleId: this.#ROLE_LIST.CLICK
         }, {
             params: {
                 time: +new Date(), uid: process.env.UID
             }
-        }).then(({data}) => data.data)
-    };
-    getSign = (time, gameId) => {
-        return jwt.sign({
-            gameId, time
-        }, PUBLIC_KEY, {
-            algorithm: 'ES256', expiresIn: 2592e3, header: {
-                alg: 'ES256', typ: 'JWT'
-            }
+        }).then(({data}) => {
+            const {mapData, gameId} = data.data;
+            this.#gameId = gameId;
+            this.#mapData = mapData;
         })
+    };
+    #getSign = (time) => {
+        return jwt.sign({
+                time,
+                gameId: this.#gameId
+            },
+            this.#PUBLIC_KEY,
+            {
+                algorithm: 'ES256',
+                expiresIn: 2592e3,
+                header: {
+                    alg: 'ES256', typ: 'JWT'
+                }
+            })
     }
-    move = (command, gameId) => {
+    #getTrack = (maps) => {
+        const mapsTrack = [[3, 1, 'U'], [2, 2, 'L'], [4, 2, 'D'], [3, 3, 'R']];
+        const mapsTree = chunk(maps, this.#COLUMN);
+        // 过滤掉有障碍物的位置
+        const trackXY = mapsTrack.filter((item) => {
+            const xy = mapsTree[item[0]][item[1]];
+            return xy !== this.#OBSTACLE;
+        });
+        // 移动后反方向移动回初始位置
+        return trackXY.map((item) => [item[2], this.#NEGATIVE_DIRECTION[item[2]]]).flat();
+    };
+    move = () => {
         const NOW_TIME = +new Date()
-        const xttgameid = this.getSign(NOW_TIME, gameId)
+        const command = this.#getTrack(this.#mapData)
+        const xttgameid = this.#getSign(NOW_TIME)
         return this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/game/command',
             {command},
             {
                 headers: {
                     'x-tt-gameid': xttgameid
-                }, params: {
-                    time: +new Date(), uid: process.env.UID
+                },
+                params: {
+                    time: NOW_TIME,
+                    uid: process.env.UID
                 }
             })
     };
@@ -121,18 +140,22 @@ class Game {
 
 const sea_gold = async () => {
     if (!process.env.UID) {
-        message.push('❌ 未设置UID，游戏不能执行');
+        message.push('❌【海底掘金】未设置UID');
         return
     }
     const game = new Game();
+    // 初始化
     await game.init();
-    const {mapData, gameId} = await game.start();
-    const track = getTrack(mapData);
+    const [error] = await to(game.start())
+    if (error) {
+        messages.push(error);
+        return
+    }
     await sleep(2000);
-    await game.move(track, gameId);
+    await game.move();
     await sleep(2000);
     const {realDiamond, todayDiamond, todayLimitDiamond} = await game.end();
-    messages.push(`🎮 本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
+    messages.push(`🎮【海底掘金】本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
     if (realDiamond < 40) {
         // 奖励小于40刷新下地图
         await sleep(2000);
@@ -142,6 +165,8 @@ const sea_gold = async () => {
         const time = random(1000, 10000);
         await sleep(time);
         await sea_gold();
+    } else {
+        messages.push(`🎮【海底掘金】已上限`)
     }
 }
 module.exports = sea_gold;
