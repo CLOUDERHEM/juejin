@@ -34,6 +34,7 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
     init = async () => {
         const authorization = await this.#getAuthorization();
         this.#axios = axios.create({
+            baseURL: 'https://juejin-game.bytedance.com/game/sea-gold',
             headers: {
                 authorization,
             }
@@ -45,7 +46,7 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
             gameStatus,
             todayDiamond,
             todayLimitDiamond
-        } = await this.#axios.get('https://juejin-game.bytedance.com/game/sea-gold/home/info', {
+        } = await this.#axios.get('/home/info', {
             params: {
                 time: +new Date(), uid: process.env.UID
             }
@@ -58,7 +59,7 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
             await this.end()
         }
         //登录
-        await this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/user/login', {
+        await this.#axios.post('/user/login', {
             name: userInfo.name
         }, {
             params: {
@@ -66,7 +67,7 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
             }
         })
         //开始
-        await this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/game/start', {
+        await this.#axios.post('/game/start', {
             roleId: this.#ROLE_LIST.CLICK
         }, {
             params: {
@@ -107,7 +108,7 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
         const NOW_TIME = +new Date()
         const command = this.#getTrack(this.#mapData)
         const xttgameid = this.#getSign(NOW_TIME)
-        return this.#axios.post('https://juejin-game.bytedance.com/game/sea-gold/game/command',
+        return this.#axios.post('/game/command',
             {command},
             {
                 headers: {
@@ -120,14 +121,14 @@ nYJsb4O8lMqNXaI1j16OmXk9CkcQQXbzfg==
             })
     };
     end = () => {
-        return this.#axios.post(`https://juejin-game.bytedance.com/game/sea-gold/game/over`, {isButton: 1}, {
+        return this.#axios.post(`/game/over`, {isButton: 1}, {
             params: {
                 time: +new Date(), uid: process.env.UID
             }
         }).then(({data}) => data.data);
     }
     freshMap = () => {
-        return this.#axios.post(`https://juejin-game.bytedance.com/game/sea-gold/game/fresh_map`,
+        return this.#axios.post(`/game/fresh_map`,
             {},
             {
                 params: {
