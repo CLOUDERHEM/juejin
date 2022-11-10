@@ -4,11 +4,11 @@
 ## 任务列表
 | 任务名称      | 支持情况 | Secrets         |
 |-----------|------|-----------------|
-| 签到        | ✅    | COOKIE          |
-| 抽奖        | ✅    | COOKIE          |
-| 沾喜气       | ✅    | COOKIE          |
-| 飞书webhook | ✅    | FEISHU_WEB_HOOK |
-| 游戏        | ✅    | COOKIE  UID     |
+| 签到        | ✅    | `COOKIE`          |
+| 抽奖        | ✅    | `COOKIE`          |
+| 沾喜气       | ✅    | `COOKIE`          |
+| 飞书webhook | ✅    | `FEISHU_WEB_HOOK` |
+| 游戏        | ✅    | `COOKIE`  `UID`     |
 
 ## 如何使用
 ### 一、Fork此仓库
