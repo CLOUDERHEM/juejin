@@ -11,9 +11,9 @@ async function dip_lucky() {
     const index = random(0, lotteries.length - 1);
     await axios.post('https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky', {lottery_history_id: lotteries[index].history_id}).then(({data}) => {
         if (data.data.has_dip) {
-            message.push(`❌ 今日已沾过喜气，喜气值：${data.data.total_value}`)
+            message.push(`✅ 【沾喜气】已沾过喜气，喜气值：${data.data.total_value}`)
         } else if (data.data.dip_action === 1) {
-            message.push(`✅ 沾喜气成功，喜气值：${data.data.total_value}`)
+            message.push(`✅【沾喜气】操作成功，喜气值：${data.data.total_value}`)
         }
     })
 }

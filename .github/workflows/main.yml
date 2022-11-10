@@ -10,16 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: 下载node依赖
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      - run: npm install axios
-      - run: npm install lodash
-      - run: npm install jsonwebtoken
       - name: 执行脚本
         env:
           UID: ${{ secrets.UID }}
           COOKIE: ${{ secrets.COOKIE }}
           FEISHU_WEB_HOOK: ${{ secrets.FEISHU_WEB_HOOK }}
-        run: node src/index.js
+        run: npm ci & node src/index.js
