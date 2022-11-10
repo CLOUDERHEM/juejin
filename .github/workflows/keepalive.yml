@@ -1,4 +1,4 @@
-name: keepalive
+name: 保持活动状态
 on:
   schedule:
     - cron: "0 0 * * *"
@@ -10,4 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: gautamkrishnar/keepalive-workflow@v1 # using the workflow with default settings
+      - name: Keepalive Workflow
+        uses: gautamkrishnar/keepalive-workflow@1.0.10
+
