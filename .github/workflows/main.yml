@@ -19,4 +19,6 @@ jobs:
         with:
           node-version: 16.x
       - name: 执行脚本
-        run: npm ci & node src/index.js
+        run: | 
+          npm ci 
+          node src/index.js
