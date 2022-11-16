@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  UID: ${{ secrets.UID }}
   COOKIE: ${{ secrets.COOKIE }}
   FEISHU_WEB_HOOK: ${{ secrets.FEISHU_WEB_HOOK }}
 
@@ -18,7 +17,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      - name: 执行脚本
-        run: | 
-          npm i 
-          node src/index.js
+      - name: run
+        run: npm install && npm run start
