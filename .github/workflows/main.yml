@@ -18,4 +18,4 @@ jobs:
         with:
           node-version: 16.x
       - name: run
-        run: npm install & npm run start
+        run: npm install && npm run start
