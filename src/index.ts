@@ -33,7 +33,7 @@ const main = async () => {
         seaGold(),
         bugFix()
     ]);
-    await getMineral().then((mineral) => message.push(`💎 当前矿石：${mineral}`));
+    await getMineral().then((mineral) => message.push(`💎【矿石】：${mineral}`));
 }
 main().finally(() => {
     feishuHook(message.text)
