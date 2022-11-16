@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "father dev",
     "build": "father build",
-    "start": "node -r dotenv/config dist/cjs/index.js",
+    "start": "npm run build && node -r dotenv/config dist/cjs/index.js",
     "build:deps": "father prebundle",
     "prepublishOnly": "father doctor && npm run build"
   },
@@ -22,12 +22,14 @@
     "access": "public"
   },
   "devDependencies": {
+    "@types/cookie": "^0.5.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/lodash": "^4.14.189",
     "dotenv": "^16.0.3",
     "father": "^4.1.0"
   },
   "dependencies": {
+    "cookie": "^0.5.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21"
   }

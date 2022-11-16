@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const feishuHook = (text: any) => {
     if (!process.env.FEISHU_WEB_HOOK) {
-        console.log('🤖️ 飞书机器人未设置')
+        console.log('🤖️【飞书机器人】未设置')
         return
     }
     return axios.post(
@@ -18,6 +18,6 @@ export const feishuHook = (text: any) => {
             },
         }).then(({data}: any) => {
         if (data.StatusMessage === 'success' && data.StatusCode === 0)
-            console.log('🤖️ 飞书机器人消息发送成功')
+            console.log('🤖【飞书机器人】消息发送成功')
     })
 }

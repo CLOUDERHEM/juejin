@@ -1,5 +1,3 @@
-import {cookieAxios} from './axios';
+import {instanceAxios} from './axios';
 
-export const getMineral=()=>{
-    return cookieAxios.get('/growth_api/v1/get_cur_point').then(({data}) => data.data)
-}
+export const getMineral = () => instanceAxios.get('/growth_api/v1/get_cur_point');

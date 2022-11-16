@@ -5,15 +5,23 @@ import {dipLucky} from './dip-lucky';
 import {getMineral} from './get-mineral';
 import {seaGold} from './sea-gold';
 import {feishuHook} from './feishu-hook';
-import {setAuthorizationAxios} from './axios';
+import {gameAxios, instanceAxios} from './axios';
+import {bugFix} from "./bug-fix";
 
 const main = async () => {
     if (!process.env.COOKIE) {
-        message.push('❌ 未设置cookie');
+        message.push('❌【cookie】未设置');
         return
     }
-    await setAuthorizationAxios();
-    await getMineral().then((prevMineral) => message.push(`💎 昨日矿石：${prevMineral}`));
+    const {user_name, user_id} = await instanceAxios.get('/user_api/v1/user/get');
+    message.push(`👤【用户名】${user_name}`);
+    await instanceAxios.get('https://juejin.cn/get/token/get/token').then(({data}) => {
+        gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`;
+        gameAxios.defaults.params = {
+            time: +new Date(),
+            uid: user_id
+        }
+    });
     await Promise.allSettled([
         (async () => {
             //签到
@@ -22,7 +30,8 @@ const main = async () => {
             await luckDraw();
         })(),
         dipLucky(),
-        seaGold()
+        seaGold(),
+        bugFix()
     ]);
     await getMineral().then((mineral) => message.push(`💎 当前矿石：${mineral}`));
 }
