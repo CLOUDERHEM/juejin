@@ -5,7 +5,7 @@ import {dipLucky} from './dip-lucky';
 import {getMineral} from './get-mineral';
 import {seaGold} from './sea-gold';
 import {feishuHook} from './feishu-hook';
-import {gameAxios, instanceAxios} from './axios';
+import {gameAxios, axios} from './axios';
 import {bugFix} from "./bug-fix";
 
 const main = async () => {
@@ -13,15 +13,12 @@ const main = async () => {
         message.push('❌【cookie】未设置');
         return
     }
-    const {user_name, user_id} = await instanceAxios.get('/user_api/v1/user/get');
-    message.push(`👤【用户名】${user_name}`);
-    await instanceAxios.get('https://juejin.cn/get/token/get/token').then(({data}) => {
-        gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`;
-        gameAxios.defaults.params = {
-            time: +new Date(),
-            uid: user_id
-        }
-    });
+    const {user_name, user_id} = await axios.get('/user_api/v1/user/get');
+    message.push(`👤【用户】${user_name}`);
+    await axios.get('https://juejin.cn/get/token/get/token').then(({data})=>{
+        gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`
+        gameAxios.defaults.params = {time: +new Date(), uid: user_id}
+    })
     await Promise.allSettled([
         (async () => {
             //签到

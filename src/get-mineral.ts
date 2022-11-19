@@ -1,3 +1,3 @@
-import {instanceAxios} from './axios';
+import {axios} from './axios';
 
-export const getMineral = () => instanceAxios.get('/growth_api/v1/get_cur_point');
+export const getMineral = () => axios.get('/growth_api/v1/get_cur_point');
