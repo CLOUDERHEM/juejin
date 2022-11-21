@@ -13,9 +13,10 @@ export class Game {
     public async automatic(): Promise<any> {
         this.LOOP_COUNT++;
         if (this.LOOP_COUNT > 30) {
-            message.push(`❌【海底掘金】次数过多，稍后再试`)
+            message.error(`【海底掘金】次数过多，稍后再试`)
             return
         }
+        console.log(`【海底掘金】第${this.LOOP_COUNT}次执行`)
         const {gameId, mapData} = await this.start()
         await sleep(2000)
         await this.command(gameId, mapData)

@@ -1,8 +1,10 @@
+/*
+*  BugFix
+*/
 import {sleep} from './utils';
 import {random} from 'lodash';
 import {message} from "./message";
 import {axios} from './axios';
-// import {getCookieParams} from "./utils";
 
 export const bugFix = async () => {
     const notCollect = await axios.post("/user_api/v1/bugfix/not_collect", {});
@@ -11,5 +13,5 @@ export const bugFix = async () => {
         await axios.post("/user_api/v1/bugfix/collect", {bug_type, bug_time});
         await sleep(random(500, 1000))
     }
-    message.push(`🐛【BugFix】收集了${notCollect.length}个bug`);
+    message.info(`🐛【BugFix】收集了${notCollect.length}个bug`);
 }
