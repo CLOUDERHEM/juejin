@@ -22,12 +22,13 @@ export class Game {
         await this.command(gameId, mapData)
         await sleep(2000)
         const {realDiamond, todayDiamond, todayLimitDiamond} = await this.over();
-        if (realDiamond < 40) {
-            // 奖励小于40刷新下地图
-            await sleep(2000)
-            await service.freshMap()
-        }
+        console.log(`【海底掘金】本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
         if (todayDiamond < todayLimitDiamond) {
+            if (realDiamond < 40) {
+                // 奖励小于40刷新下地图
+                await sleep(2000)
+                await service.freshMap()
+            }
             const time = random(1000, 10000)
             await sleep(time)
             await this.automatic()
