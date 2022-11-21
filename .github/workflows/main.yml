@@ -7,7 +7,7 @@ on:
 
 env:
   COOKIE: ${{ secrets.COOKIE }}
-  FEISHU_WEB_HOOK: ${{ secrets.FEISHU_WEB_HOOK }}
+  WEBHOOK_FEISHU: ${{ secrets.WEBHOOK_FEISHU }}
 
 jobs:
   main:
