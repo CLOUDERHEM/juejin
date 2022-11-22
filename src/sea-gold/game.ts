@@ -31,7 +31,7 @@ export class Game {
             }
             const time = random(1000, 10000)
             await sleep(time)
-            await this.automatic()
+            return this.automatic()
         }
         return {todayDiamond, todayLimitDiamond}
     }
