@@ -23,5 +23,5 @@
 ![img.png](assets/img_5.png)
 
 ## 如果是新用户可走我的链接
-![img.png](assets/img_6.jpg)
+![img.png](assets/img_6.png)
 
