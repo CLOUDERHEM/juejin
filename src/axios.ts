@@ -1,4 +1,5 @@
 import externalAxios from 'axios';
+import {AxiosResponse} from 'axios'
 
 const headers = {
     'content-type': 'application/json; charset=utf-8',
@@ -15,9 +16,8 @@ export const axios = externalAxios.create({
     baseURL: "https://api.juejin.cn",
     headers,
 });
-axios.defaults.headers.common['cookie'] = process.env.COOKIE;
-axios.interceptors.response.use((response: any) => {
-    const {err_no, err_msg,data} = response.data;
+axios.interceptors.response.use((response: AxiosResponse) => {
+    const {err_no, err_msg, data} = response.data;
     if (err_no === 0 && err_msg === 'success') {
         return data ?? {}
     }
@@ -28,7 +28,7 @@ export const gameAxios = externalAxios.create({
     baseURL: "https://juejin-game.bytedance.com",
     headers
 })
-gameAxios.interceptors.response.use((response: any) => {
+gameAxios.interceptors.response.use((response: AxiosResponse) => {
     const {code, message, data} = response.data;
     if (code === 0 && message === 'success') {
         return data ?? {}

@@ -8,13 +8,15 @@ import {getMineral} from './get-mineral';
 import {gameAxios, axios} from './axios';
 
 const main = async () => {
-    if (!process.env.COOKIE) {
-        message.error('【cookie】未设置');
+    if (!process.env.REQUIRED_PARAMS) {
+        message.error('未设置 REQUIRED_PARAMS')
         return
     }
-    const {user_name, user_id} = await axios.get('/user_api/v1/user/get');
+    global.REQUIRED_PARAMS = JSON.parse(process.env.REQUIRED_PARAMS);
+    axios.defaults.headers.common['cookie'] = global.REQUIRED_PARAMS.cookie;
+    const {user_name, user_id}: any = await axios.get('/user_api/v1/user/get');
     message.info(`👤【用户】${user_name}`);
-    await axios.get('https://juejin.cn/get/token/get/token').then(({data})=>{
+    await axios.get('https://juejin.cn/get/token/get/token').then(({data}) => {
         gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`
         gameAxios.defaults.params = {time: +new Date(), uid: user_id}
     })

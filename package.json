@@ -5,9 +5,9 @@
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.ts",
   "scripts": {
-    "dev": "father dev",
+    "dev": "npm run build && node -r dotenv/config ncc/index.js",
     "build": "father build && ncc build dist/cjs/index.js -m -o ncc",
-    "start": "npm run build && node -r dotenv/config dist/cjs/index.js",
+    "start": "node ncc/index.js",
     "build:deps": "father prebundle",
     "prepublishOnly": "father doctor && npm run build"
   },

@@ -1,10 +1,6 @@
-import {AxiosInstance as Instance} from 'axios'
-
-declare module 'axios' {
-    interface AxiosInstance extends Instance {
-    }
-
-    interface AxiosResponse<T = any> {
-        [key: string]: any
-    }
+export declare global {
+    var REQUIRED_PARAMS: {
+        cookie: string
+        webhookFeishu: string
+    };
 }

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  COOKIE: ${{ secrets.COOKIE }}
+  REQUIRED_PARAMS: ${{ secrets.REQUIRED_PARAMS }}
   WEBHOOK_FEISHU: ${{ secrets.WEBHOOK_FEISHU }}
 
 jobs:
