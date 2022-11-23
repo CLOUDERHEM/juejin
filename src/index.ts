@@ -20,6 +20,7 @@ const main = async () => {
         gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`
         gameAxios.defaults.params = {time: +new Date(), uid: user_id}
     })
+    const prevMineral: any = await getMineral()
     await Promise.allSettled([
         (async () => {
             //签到
@@ -31,6 +32,9 @@ const main = async () => {
         seaGold(),
         bugFix()
     ]);
-    await getMineral().then((mineral) => message.info(`💎【矿石】：${mineral}`));
+    const mineral: any = await getMineral();
+    const upwardsMineral = mineral - prevMineral
+    message.info(`📈【今日增长矿石】${upwardsMineral} ≈ ${Math.round(upwardsMineral / 10000 * 3.3458856345885635)}元`);
+    message.info(`💎【总矿石】：${mineral} ≈ ${Math.round(mineral / 10000 * 3.3458856345885635)}元`)
 }
 main().finally(message.finally)
