@@ -1,5 +1,5 @@
 # ![img.png](assets/logo.svg)
-
+## 👉 [保姆级教程](https://github.com/hudiemon/course/blob/main/README.md)
 ## 任务列表
 | 任务名称      | 支持情况 | Secrets                  |
 |-----------|------|--------------------------|
@@ -8,20 +8,3 @@
 | 沾喜气       | ✅    | `REQUIRED_PARAMS.cookie` |
 | 海底掘金      | ✅    | `REQUIRED_PARAMS.cookie` |
 | 飞书webhook | ✅    | `WEBHOOK_FEISHU`         |
-
-## 如何使用
-### 一、Fork此仓库
-![img.png](assets/img.png)
-![img.png](assets/img_2.png)
-### 二、设置Secrets
-![img.png](assets/img_1.png)
-### 三、设置Actions
-![img.png](assets/img_3.png)
-### 四、主动触发执行
-![img.png](assets/img_4.png)
-### 五、定时执行
-![img.png](assets/img_5.png)
-
-## 如果是新用户可走我的链接
-![img.png](assets/img_6.png)
-
