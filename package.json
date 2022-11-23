@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "npm run build && node -r dotenv/config ncc/index.js",
     "build": "father build && ncc build dist/cjs/index.js -m -o ncc",
-    "start": "node ncc/index.js",
+    "start": "node -r dotenv/config ncc/index.js",
     "build:deps": "father prebundle",
     "prepublishOnly": "father doctor && npm run build"
   },
