@@ -1,6 +1,5 @@
 import {random} from "lodash";
 import {sleep} from "../utils";
-import {message} from "../message";
 import * as service from './service';
 import {mapData2Command, gameId2XTTGameid} from './utils';
 
@@ -10,19 +9,23 @@ export class Game {
         CLICK: 2, YOYO: 1, HAWKING: 3
     }
 
-    public async automatic(): Promise<any> {
+    /**
+     * 自动玩游戏
+     * @returns {number} todayDiamond 今天获得的积分
+     * @returns {number} todayLimitDiamond 今日游戏上限
+     */
+    public async automatic(): Promise<{ todayDiamond: number, todayLimitDiamond: number }> {
         this.LOOP_COUNT++;
         if (this.LOOP_COUNT > 30) {
-            message.error(`【海底掘金】次数过多，稍后再试`)
-            return
+            return Promise.reject(`【海底掘金】次数过多，稍后再试`)
         }
-        console.log(`【海底掘金】第${this.LOOP_COUNT}次执行`)
+        // console.log(`【海底掘金】第${this.LOOP_COUNT}次执行`)
         const {gameId, mapData} = await this.start()
         await sleep(2000)
         await this.command(gameId, mapData)
         await sleep(2000)
         const {realDiamond, todayDiamond, todayLimitDiamond} = await this.over();
-        console.log(`【海底掘金】本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
+        // console.log(`【海底掘金】本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
         if (todayDiamond < todayLimitDiamond) {
             if (realDiamond < 40) {
                 // 奖励小于40刷新下地图

@@ -1,40 +1,36 @@
+import {toMoney} from "./utils";
 import {signIn} from './sign-in';
 import {bugFix} from "./bug-fix";
 import {message} from './message';
 import {seaGold} from './sea-gold';
-import {luckDraw} from './luck-draw';
+import {lottery} from './lottery';
 import {dipLucky} from './dip-lucky';
-import {getMineral} from './get-mineral';
-import {gameAxios, axios} from './axios';
+import {getUser, getCurPoint} from './services';
 
 const main = async () => {
-    if (!process.env.REQUIRED_PARAMS) {
-        message.error('未设置 REQUIRED_PARAMS')
+    if (!process.env.COOKIE) {
+        message.error('未设置 COOKIE')
         return
     }
-    global.REQUIRED_PARAMS = JSON.parse(process.env.REQUIRED_PARAMS);
-    axios.defaults.headers.common['cookie'] = global.REQUIRED_PARAMS.cookie;
-    const {user_name, user_id}: any = await axios.get('/user_api/v1/user/get');
+    const {user_name, user_id} = await getUser();
     message.info(`👤【用户】${user_name}`);
-    await axios.get('https://juejin.cn/get/token/get/token').then(({data}) => {
-        gameAxios.defaults.headers.common['authorization'] = `Bearer ${data}`
-        gameAxios.defaults.params = {time: +new Date(), uid: user_id}
-    })
-    const prevMineral: any = await getMineral()
-    await Promise.allSettled([
-        (async () => {
-            //签到
-            await signIn();
-            //签到后免费抽奖
-            await luckDraw();
-        })(),
-        dipLucky(),
-        seaGold(),
-        bugFix()
-    ]);
-    const mineral: any = await getMineral();
+    //获取任务前的矿石
+    const prevMineral = await getCurPoint()
+    //签到
+    await signIn()
+    //抽奖
+    await lottery()
+    //沾喜气
+    await dipLucky()
+    //BugFix
+    await bugFix()
+    //海底掘金
+    await seaGold(user_id)
+    //获取执行任务后最新的矿石
+    const mineral = await getCurPoint();
+    //今日获得的矿石
     const upwardsMineral = mineral - prevMineral
-    message.info(`📈【今日增长矿石】${upwardsMineral} ≈ ${Math.round(upwardsMineral / 10000 * 3.3458856345885635)}元`);
-    message.info(`💎【总矿石】：${mineral} ≈ ${Math.round(mineral / 10000 * 3.3458856345885635)}元`)
+    message.info(`📈【今日增长矿石】${upwardsMineral} ≈ ${toMoney(upwardsMineral)}`);
+    message.info(`💎【总矿石】：${mineral} ≈ ${toMoney(mineral)}`)
 }
 main().finally(message.finally)
