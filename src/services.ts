@@ -30,7 +30,7 @@ export const getCounts = (): Promise<{ cont_count: number, sum_count: number }> 
  * 获取抽奖信息
  * @returns {Promise<number>} free_count 免费抽奖次数
  */
-export const getLotteryConfig = (): Promise<{ free_count: number }> => axios.get('/growth_api/v1/lottery_config/get');
+export const getLotteryConfig = (): Promise<{ free_count: number }> => axios.post('/growth_api/v1/lottery_config/get');
 /**
  * 获取抽奖信息
  * @returns {Promise<string>} lottery_name 奖品名称

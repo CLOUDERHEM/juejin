@@ -1,3 +1,4 @@
+import {to} from 'await-to-js';
 import {toMoney} from "./utils";
 import {signIn} from './sign-in';
 import {bugFix} from "./bug-fix";
@@ -17,17 +18,17 @@ const main = async () => {
     //获取任务前的矿石
     const prevMineral = await getCurPoint()
     //签到
-    await signIn()
+    await to(signIn())
     //抽奖
-    await lottery()
+    await to(lottery())
     //沾喜气
-    await dipLucky()
+    await to(dipLucky())
     //BugFix
-    await bugFix()
+    await to(bugFix())
     //海底掘金
-    await seaGold(user_id)
+    await to(seaGold(user_id))
     //获取执行任务后最新的矿石
-    const mineral = await getCurPoint();
+    const mineral = await getCurPoint()
     //今日获得的矿石
     const upwardsMineral = mineral - prevMineral
     message.info(`📈【今日增长矿石】${upwardsMineral} ≈ ${toMoney(upwardsMineral)}`);
