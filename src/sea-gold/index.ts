@@ -4,15 +4,15 @@
 import {Game} from './game';
 import {message} from "../message";
 import {to} from 'await-to-js';
-import {setAxiosToken} from '../set-axios-token';
+import {setGameRequestAuthorization} from '../request';
 
-export const seaGold = async (user_id: string) => {
-    await setAxiosToken(user_id)
+export const seaGold = async () => {
+    await setGameRequestAuthorization()
     const game = new Game()
     const [error, data] = await to(game.automatic())
     if (error) {
-        message.error((error as any))
+        message.error(error)
         return
     }
-    message.info(`🎮【海底掘金】${data.todayDiamond} / ${data.todayLimitDiamond}`)
+    message.info(`🎮【海底掘金】${data?.todayDiamond} / ${data?.todayLimitDiamond}`)
 }

@@ -1,6 +1,6 @@
 import {random} from "lodash";
 import {sleep} from "../utils";
-import * as service from './service';
+import * as service from '../services';
 import {mapData2Command, gameId2XTTGameid} from './utils';
 
 export class Game {

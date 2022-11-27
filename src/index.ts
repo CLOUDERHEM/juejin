@@ -8,13 +8,16 @@ import {lottery} from './lottery';
 import {dipLucky} from './dip-lucky';
 import {getUser, getCurPoint} from './services';
 
+import './request';
+
 const main = async () => {
     if (!process.env.COOKIE) {
         message.error('未设置 COOKIE')
         return
     }
-    const {user_name, user_id} = await getUser();
-    message.info(`👤【用户】${user_name}`);
+    const {user_name, user_id} = await getUser()
+    gameRequest.defaults.params = {uid: user_id}
+    message.info(`👤【用户】${user_name}`)
     //获取任务前的矿石
     const prevMineral = await getCurPoint()
     //签到
@@ -26,7 +29,7 @@ const main = async () => {
     //BugFix
     await to(bugFix())
     //海底掘金
-    await to(seaGold(user_id))
+    await to(seaGold())
     //获取执行任务后最新的矿石
     const mineral = await getCurPoint()
     //今日获得的矿石
