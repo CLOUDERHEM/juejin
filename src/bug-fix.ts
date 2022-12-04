@@ -1,17 +1,16 @@
 /**
  *  BugFix
  */
-import random from 'lodash/random';
 import {message} from "./message";
 import {sleep} from '@hudiemon/utils'
-import * as service from './services';
+import {notCollectBug,collectBug} from './services';
 
 export const bugFix = async () => {
-    const {data: {notCollect}} = await service.notCollectBug({});
-    for (let i = 0; i < notCollect.length; i++) {
-        const {bug_type, bug_time} = notCollect[i];
-        await service.collectBug({bug_type, bug_time});
+    const {data} = await notCollectBug({});
+    for (let i = 0; i < data.length; i++) {
+        const {bug_type, bug_time} = data[i];
+        await collectBug({bug_type, bug_time});
         await sleep(500, 1000)
     }
-    message.info(`🐛【BugFix】收集了${notCollect.length}个bug`);
+    message.info(`🐛【BugFix】收集了${data.length}个bug`);
 }
