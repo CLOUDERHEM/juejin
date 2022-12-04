@@ -6,5 +6,6 @@
 | 签到        | ✅    | `COOKIE`         |
 | 抽奖        | ✅    | `COOKIE`         |
 | 沾喜气       | ✅    | `COOKIE`         |
+| BugFix    | ✅    | `COOKIE`         |
 | 海底掘金      | ✅    | `COOKIE`         |
 | 飞书webhook | ✅    | `WEBHOOK_FEISHU` |
