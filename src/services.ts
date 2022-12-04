@@ -70,9 +70,9 @@ export const collectBug = (data: { bug_type: string, bug_time: string }) => requ
  */
 export const getToken = () => request.get('https://juejin.cn/get/token/get/token')
 
-export const info = (): Promise<{ gameStatus: number, userInfo: { name: string } }> => gameRequest.get('https://juejin-game.bytedance.com/game/sea-gold/home/info')
-export const login = (data: { name: string }) => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/user/login', data)
-export const over = (): Promise<any> => gameRequest.post(`https://juejin-game.bytedance.com/game/sea-gold/game/over`, {isButton: 1});
-export const start = (data: { roleId: number }): Promise<any> => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/game/start', data)
-export const command = (data: { command: any }, config: AxiosRequestConfig) => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/game/command', data, config)
-export const freshMap = () => gameRequest.post(`https://juejin-game.bytedance.com/game/sea-gold/game/fresh_map`, {})
+export const homeInfo = (): Promise<any> => gameRequest.get('https://juejin-game.bytedance.com/game/sea-gold/home/info')
+export const userLogin = (data: { name: string }) => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/user/login', data)
+export const gameOver = (): Promise<any> => gameRequest.post(`https://juejin-game.bytedance.com/game/sea-gold/game/over`, {isButton: 1});
+export const gameStart = (data: { roleId: number }): Promise<any> => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/game/start', data)
+export const gameCommand = (data: { command: any }, config: AxiosRequestConfig) => gameRequest.post('https://juejin-game.bytedance.com/game/sea-gold/game/command', data, config)
+export const gameFreshMap = () => gameRequest.post(`https://juejin-game.bytedance.com/game/sea-gold/game/fresh_map`, {})

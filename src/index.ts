@@ -31,7 +31,7 @@ const main = async () => {
     await to(dipLucky())
     //BugFix
     await to(bugFix())
-    const token = await getToken()
+    const {data: token} = await getToken()
     gameRequest.defaults.params = {uid: getUserRes.data.user_id}
     gameRequest.defaults.headers.common['authorization'] = `Bearer ${token}`
     //海底掘金
