@@ -1,23 +1,23 @@
 import axios from 'axios'
 import {getToken} from "./services"
 
-// axios
-request = axios.create({
-    baseURL: "https://api.juejin.cn",
+export const request = axios.create({
     headers: {
         Cookie: process.env.COOKIE,
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
     }
 });
 
-request.interceptors.response.use((response): any => {
-    const {err_no, data, err_msg} = response.data;
-    if (!err_no) return data
-    return Promise.reject(err_msg)
-});
+request.interceptors.response.use(
+    (response) =>{
+        console.log( response.data)
+        return  response.data
+    },
+    (error) => Promise.reject(error.response.data)
+)
 
 // gameAxios
-gameRequest = axios.create({
+export const gameRequest = axios.create({
     baseURL: "https://juejin-game.bytedance.com",
 })
 gameRequest.interceptors.response.use((response) => {

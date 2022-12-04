@@ -6,9 +6,9 @@ import * as service from './services';
 
 export const lottery = async () => {
     // 查询免费抽奖次数
-    const {free_count} = await service.getLotteryConfig()
+    const {data: {free_count}} = await service.getLotteryConfig()
     if (free_count === 0) return message.info('🎁【抽奖】免费次数已用光')
     // 抽奖
-    const {lottery_name} = await service.drawLottery();
+    const {data: {lottery_name}} = await service.drawLottery();
     message.info(`🎁【抽奖】${lottery_name}`)
 }

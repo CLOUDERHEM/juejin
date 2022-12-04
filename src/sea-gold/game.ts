@@ -1,5 +1,4 @@
-import {random} from "lodash";
-import {sleep} from "../utils";
+import {sleep} from "@hudiemon/utils";
 import * as service from '../services';
 import {mapData2Command, gameId2XTTGameid} from './utils';
 
@@ -19,21 +18,18 @@ export class Game {
         if (this.LOOP_COUNT > 30) {
             return Promise.reject(`【海底掘金】次数过多，稍后再试`)
         }
-        // console.log(`【海底掘金】第${this.LOOP_COUNT}次执行`)
         const {gameId, mapData} = await this.start()
         await sleep(2000)
         await this.command(gameId, mapData)
         await sleep(2000)
         const {realDiamond, todayDiamond, todayLimitDiamond} = await this.over();
-        // console.log(`【海底掘金】本次获得: ${realDiamond}, 今日已获得: ${todayDiamond}, 今日上限: ${todayLimitDiamond}`)
         if (todayDiamond < todayLimitDiamond) {
             if (realDiamond < 40) {
                 // 奖励小于40刷新下地图
                 await sleep(2000)
                 await service.freshMap()
             }
-            const time = random(1000, 10000)
-            await sleep(time)
+            await sleep(1000, 10000)
             return this.automatic()
         }
         return {todayDiamond, todayLimitDiamond}
@@ -44,7 +40,8 @@ export class Game {
         // 如果已经在游戏中那么先退出游戏
         if (gameStatus !== 0) await this.over()
         await service.login({name: userInfo.name})
-        return service.start({roleId: this.ROLE_LIST.CLICK})
+        const {data} = await service.start({roleId: this.ROLE_LIST.CLICK})
+        return data
     }
 
     public command(gameId: string, mapData: number[]) {
@@ -57,7 +54,8 @@ export class Game {
         })
     }
 
-    public over() {
-        return service.over()
+    public async over() {
+        const {data} = await service.over()
+        return data
     }
 }
