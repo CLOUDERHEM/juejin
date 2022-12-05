@@ -41,8 +41,8 @@ export class Game {
         const {error, response} = await to(homeInfo())
         if (error) return Promise.reject(error)
         // 如果已经在游戏中那么先退出游戏
-        if (response.gameStatus !== 0) await this.over()
-        await userLogin({name: response.userInfo.name})
+        if (response.data.gameStatus !== 0) await this.over()
+        await userLogin({name: response.data.userInfo.name})
         const {data} = await gameStart({roleId: this.ROLE_LIST.CLICK})
         return data
     }
