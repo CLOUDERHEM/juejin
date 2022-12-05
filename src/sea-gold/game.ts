@@ -1,12 +1,14 @@
-import {sleep} from "@hudiemon/utils";
-import {mapData2Command, gameId2XTTGameid} from './utils';
-import {homeInfo, userLogin, gameStart,gameCommand,gameOver,gameFreshMap} from '../services';
+import to from '@hudiemon/await-to'
+import {sleep} from "@hudiemon/utils"
+import {mapData2Command, gameId2XTTGameid} from './utils'
+import {homeInfo, userLogin, gameStart, gameCommand, gameOver, gameFreshMap} from '../services'
 
 export class Game {
     LOOP_COUNT = 0
     ROLE_LIST = {
         CLICK: 2, YOYO: 1, HAWKING: 3
     }
+
     /**
      * 自动玩游戏
      * @returns {number} todayDiamond 今天获得的积分
@@ -15,12 +17,12 @@ export class Game {
     public async automatic(): Promise<{ todayDiamond: number, todayLimitDiamond: number }> {
         this.LOOP_COUNT++;
         if (this.LOOP_COUNT > 30) {
-            return Promise.reject(`【海底掘金】次数过多，稍后再试`)
+            return Promise.reject(`次数过多，稍后再试`)
         }
-        const {gameId, mapData} = await this.start()
-
+        const {error, response} = await to(this.start())
+        if (error) return Promise.reject(error)
         await sleep(2000)
-        await this.command(gameId, mapData)
+        await this.command(response.gameId, response.mapData)
         await sleep(2000)
         const {realDiamond, todayDiamond, todayLimitDiamond} = await this.over();
         if (todayDiamond < todayLimitDiamond) {
@@ -36,10 +38,11 @@ export class Game {
     }
 
     public async start() {
-        const {data: {userInfo, gameStatus}} = await homeInfo()
+        const {error, response} = await to(homeInfo())
+        if (error) return Promise.reject(error)
         // 如果已经在游戏中那么先退出游戏
-        if (gameStatus !== 0) await this.over()
-        await userLogin({name: userInfo.name})
+        if (response.gameStatus !== 0) await this.over()
+        await userLogin({name: response.userInfo.name})
         const {data} = await gameStart({roleId: this.ROLE_LIST.CLICK})
         return data
     }

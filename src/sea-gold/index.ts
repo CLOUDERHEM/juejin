@@ -7,10 +7,10 @@ import {message} from "../message";
 
 export const seaGold = async () => {
     const game = new Game()
-    const {error, response: {todayDiamond, todayLimitDiamond}} = await to(game.automatic())
+    const {error, response} = await to(game.automatic())
     if (error) {
-        message.error(error)
+        message.error(`【海底掘金】${JSON.stringify(error)}`)
         return
     }
-    message.info(`🎮【海底掘金】${todayDiamond} / ${todayLimitDiamond}`)
+    message.info(`🎮【海底掘金】${response?.todayDiamond} / ${response?.todayLimitDiamond}`)
 }
