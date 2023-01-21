@@ -35,7 +35,7 @@ const main = async () => {
     gameRequest.defaults.params = {uid: getUserRes.data.user_id}
     gameRequest.defaults.headers.common['authorization'] = `Bearer ${token}`
     //海底掘金
-    await to(seaGold())
+    // await to(seaGold())
     //获取执行任务后最新的矿石
     const {response: {data: mineral}} = await to(getCurPoint())
     //今日获得的矿石
